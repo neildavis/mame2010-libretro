@@ -155,7 +155,7 @@ LDFLAGS += $(SHARED)
    AR = @ar
    LD = g++ 
    CCOMFLAGS += $(PLATCFLAGS) -ffast-math  
-   LIBS += -lstdc++ -lpthread 
+   LIBS += -lstdc++ -lpthread -ldbus-1
 
 # Android
 else ifeq ($(platform), android)
@@ -768,6 +768,7 @@ LIBDASM  = $(OBJ)/libdasm.a
 LIBSOUND = $(OBJ)/libsound.a
 LIBUTIL  = $(OBJ)/libutil.a
 LIBOCORE = $(OBJ)/libocore.a
+LIBOUTP  = $(OBJ)/liboutputs.a
 LIBOSD   = $(OSDOBJS)
 
 #-------------------------------------------------

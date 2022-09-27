@@ -2,6 +2,7 @@ SRC_DIR           = $(CORE_DIR)/src
 LIBRETRO_COMM_DIR = $(SRC_DIR)/osd/retro/libretro-common
 DEPS_DIR          = $(SRC_DIR)/lib
 
+LIBDBUS_INCFLAGS=$(shell pkg-config --cflags-only-I dbus-1)
 INCFLAGS := \
 	-I$(LIBRETRO_COMM_DIR)/include \
 	-I$(LIBRETRO_COMM_DIR)/include/compat/zlib \
@@ -13,7 +14,9 @@ INCFLAGS := \
 	-I$(DEPS_DIR)/util \
 	-I$(SRC_DIR)/lib \
 	-I$(SRC_DIR)/osd \
-	-I$(SRC_DIR)/osd/retro
+	-I$(SRC_DIR)/osd/retro \
+	-I$(SRC_DIR)/outputs \
+	$(LIBDBUS_INCFLAGS)
     
 # add expat XML library
 INCFLAGS += -I$(DEPS_DIR)/expat
@@ -76,6 +79,7 @@ DRIVERS = $(MAMEOBJ)/drivers
 LAYOUT  = $(MAMEOBJ)/layout
 MACHINE = $(MAMEOBJ)/machine
 VIDEO   = $(MAMEOBJ)/video
+OUTPUTS = $(MAMEOBJ)/outputs
 
 OBJDIRS += \
 	$(AUDIO) \
@@ -83,6 +87,7 @@ OBJDIRS += \
 	$(LAYOUT) \
 	$(MACHINE) \
 	$(VIDEO) \
+	$(OUTPUTS) \
 
 
 
@@ -4759,4 +4764,19 @@ LIBOCORE_OBJS := $(OSDCOREOBJS)
 
 $(LIBOCORE): $(OSDCOREOBJS)
 
-OBJECTS = $(DRVLIBS) $(LIBOSD) $(LIBCPU) $(LIBEMU) $(LIBDASM) $(LIBSOUND) $(LIBUTIL) $(EXPAT) $(SOFTFLOAT) $(ZLIB) $(LIBOCORE) $(RESFILE)
+#-------------------------------------------------
+# Outputs library objects
+#-------------------------------------------------
+
+OUTPUTSSRC = $(SRC_DIR)/outputs
+OUTPUTSOBJ = $(OBJ)/outputs
+
+OBJDIRS += $(OUTPUTSOBJ)
+
+OUTPUTS_OBJS = \
+	$(OUTPUTSOBJ)/realdashclient.o
+
+$(LIBOUTP): $(OUTPUTS_OBJS)
+
+
+OBJECTS = $(DRVLIBS) $(LIBOSD) $(LIBCPU) $(LIBEMU) $(LIBDASM) $(LIBSOUND) $(LIBUTIL) $(EXPAT) $(SOFTFLOAT) $(ZLIB) $(LIBOCORE) $(RESFILE) $(LIBOUTP)
