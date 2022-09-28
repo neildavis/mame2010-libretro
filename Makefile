@@ -145,6 +145,7 @@ endif
 ifeq ($(VRENDER),opengl)  
    LIBS += -lGL
 endif
+DBUS_LDFLAGS=$(shell pkg-config --libs dbus-1)
 LDFLAGS += $(SHARED)
    NATIVELD = g++
    NATIVELDFLAGS = -Wl,--warn-common -lstdc++
@@ -155,7 +156,7 @@ LDFLAGS += $(SHARED)
    AR = @ar
    LD = g++ 
    CCOMFLAGS += $(PLATCFLAGS) -ffast-math  
-   LIBS += -lstdc++ -lpthread -ldbus-1
+   LIBS += -lstdc++ -lpthread $(DBUS_LDFLAGS)
 
 # Android
 else ifeq ($(platform), android)
